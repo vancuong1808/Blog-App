@@ -5,17 +5,18 @@ import cors from 'cors';
 
 import setupUserRouter from './api/router';
 import connectDB from './mongoose/connect';
+import { UserServiceImpl } from './mongoose/service';
 
 import { errorHandler } from '../command-ingress/middlewares/error_handler';
 import { createServer } from 'http';
-import MockUserService from './api/mock/user_service';
+import { Db } from 'mongodb';
 
 
 const app = express();
 
 const createHttpServer = () => {
   const server = createServer(app);
-  const userRoute = setupUserRouter(new MockUserService());
+  const userRoute = setupUserRouter(new UserServiceImpl());
 
   app.use(cors());
   app.use(express.json());
@@ -39,8 +40,9 @@ function mustGetEnv(key: string): string {
 
 
 async function start() {
-  await connectDB({ url: mustGetEnv('MONGODB_URI') });
-
+  await connectDB({
+    url: mustGetEnv('MONGODB_URI'),
+  });
 
   const server = createHttpServer();
 

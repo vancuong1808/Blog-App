@@ -1,25 +1,43 @@
-import { Db, ObjectId } from 'mongodb';
-import { User, IUserService, UserCreation } from '../api/types';
+import { Db } from 'mongodb';
+import { IUserService, User, UserCreation } from '../api/types';
 
-export class UserServiceImpl implements IUserService  {
-  // dependencies
+export class UserServiceImpl implements IUserService {
+  // Setter
   db: Db;
 
-  // constructor
+  setDb(db: Db) {
+    this.db = db;
+  }
+
   constructor(db: Db) {
     this.db = db;
   }
 
   async create(dto: UserCreation): Promise<User> {
-    throw new Error('Not yet implemented');
-  }
+    const {
+      email,
+      name,
+    } = dto;
 
-  async getOneById(id: string): Promise<User | null> {
-    throw new Error('Not yet implemented');
-  }
+    const insertOneResult = await this.db.collection('users')
+      .insertOne({
+        email,
+        name,
+      });
 
-  async getAll(): Promise<User[]> {
-    throw new Error('Not yet implemented');
+    const insertedID = insertOneResult.insertedId;
+
+    return {
+      id: String(insertedID),
+      name,
+      email,
+    };
+  }
+  getAll(): Promise<User[]> {
+    throw new Error('Method not implemented.');
+  }
+  getOneById(id: string): Promise<User | null> {
+    throw new Error('Method not implemented.');
   }
 
 }
