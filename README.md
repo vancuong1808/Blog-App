@@ -9,4 +9,4 @@ How to run:
   - ```docker compose up```
   - ```npm run dev:comamnd-ingress```
 
-Architecture: ![Screenshot](architecture.svg)
+Architecture: ![Screenshot](https://imgur.com/3iY4uc3.png)
