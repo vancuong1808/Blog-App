@@ -1,7 +1,7 @@
 import express, { Router } from 'express';
-import { IUserService } from './types';
+import { UserService } from './service';
 
-function initUserRouter(service: IUserService): Router {
+function initUserRouter(service: UserService): Router {
   const router = express.Router();
 
   // Get all users
@@ -15,7 +15,7 @@ function initUserRouter(service: IUserService): Router {
   router.get('/:id', async (req, res) => {
     const userID = req.params.id;
 
-    const user = await service.getOneById(userID);
+    const user = await service.getOne(userID);
 
     if (!user) {
       return res.status(404).json({ message: 'Not Found' });
@@ -29,11 +29,13 @@ function initUserRouter(service: IUserService): Router {
     const {
       name,
       email,
+      password,
     } = req.body;
 
-    const createdUser = await service.create({
+    const createdUser = await service.createUser({
       name,
       email,
+      password,
     });
 
     return res.status(201).json(createdUser);

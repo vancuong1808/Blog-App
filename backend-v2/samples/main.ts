@@ -5,18 +5,18 @@ import cors from 'cors';
 
 import setupUserRouter from './api/router';
 import connectDB from './mongoose/connect';
-import { UserServiceImpl } from './mongoose/service';
+import { UserRepository } from './mongoose/repository';
 
 import { errorHandler } from '../command-ingress/middlewares/error_handler';
 import { createServer } from 'http';
-import { Db } from 'mongodb';
+import { UserService } from './api/service';
 
 
 const app = express();
 
 const createHttpServer = () => {
   const server = createServer(app);
-  const userRoute = setupUserRouter(new UserServiceImpl());
+  const userRoute = setupUserRouter(new UserService(new UserRepository()));
 
   app.use(cors());
   app.use(express.json());

@@ -4,19 +4,20 @@ type User = {
   name: string;
 }
 
-type UserCreation = {
+type UserCreationDto = {
   email: string;
   name: string;
+  password: string;
 };
 
-interface IUserService {
-  create(dto: UserCreation): Promise<User>;
+interface IUserRepository {
+  create(dto: UserCreationDto): Promise<User>;
   getAll(): Promise<User[]>;
   getOneById(id: string): Promise<User | null>;
 }
 
 export {
-  IUserService,
-  UserCreation,
+  IUserRepository,
+  UserCreationDto,
   User,
 }
