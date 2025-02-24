@@ -1,7 +1,35 @@
 import Post from '../../../../../internal/model/post';
+import User from '../../../../../internal/model/user';
 import { PostEntity, PostCreationDto, PostService } from '../types';
 
 export class PostServiceImpl implements PostService {
+  async getPost(id: string): Promise<PostEntity> {
+    const post = await Post.findOne({ _id: id });
+
+    if (!post) {
+      throw new Error('Post not found');
+    }
+
+    const user = await User.findOne({ _id: post.author });
+
+    return {
+      id: String(post._id),
+      image: String(post.image),
+      authorID: String(post.author),
+      markdown: post.markdown,
+      title: post.title,
+      tags: post.tags,
+      summary: post.summary,
+      createdAt: Number(post.createdAt),
+      author: {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        avatar: user.avatar,
+      },
+    };
+  }
+
   async fetchPostsByUser(id: string): Promise<PostEntity[]> {
     const results = await Post.find({ author: id })
       .lean(true);
@@ -44,4 +72,6 @@ export class PostServiceImpl implements PostService {
       createdAt: Number(insertResult.createdAt),
     }
   }
+
+
 }
