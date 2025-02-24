@@ -9,6 +9,6 @@ const initAuthRoute: (controller: AuthController) => express.Router  = (controll
   router.route('/token').post(controller.refreshToken.bind(controller));
 
   return router;
-}
+};
 
 export default initAuthRoute;

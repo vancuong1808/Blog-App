@@ -31,8 +31,6 @@ class AuthController extends BaseController {
         code: exchangeGoogleTokenBody.code,
       });
 
-      console.log('exchangeResult', exchangeResult);
-
       const params = new URLSearchParams({
         uid: exchangeResult.sub,
         access_token: exchangeResult.accessToken,

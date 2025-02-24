@@ -14,6 +14,9 @@ const setupPostRoute = (
   router.route('/users/:id')
     .get(controller.fetchPostByUser.bind(controller));
 
+  router.route('/:id')
+    .get(controller.getPost.bind(controller));
+
   return router;
 }
 
