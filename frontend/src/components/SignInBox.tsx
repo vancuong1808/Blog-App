@@ -19,7 +19,7 @@ export default function SignInBox({message, typeOfLogin}: SignInBoxType) {
         const rootUrl = "https://accounts.google.com/o/oauth2/v2/auth";
         const options = {
             redirect_uri: import.meta.env.VITE_GOOGLE_OAUTH_REDIRECT_URL,
-            client_id: import.meta.env.VITE_GOOGLE_CLIENT_ID,
+            clientid: import.meta.env.VITE_GOOGLE_CLIENTid,
             access_type: "offline",
             response_type: "code",
             prompt: "consent",

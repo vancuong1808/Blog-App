@@ -33,7 +33,7 @@ export default function Post() {
         onSuccess: (data) => {
             document.title = data.data.post.title + " - Medium";
             setVotes(data.data.post.votes.length ?? 0);
-            setTurnBlack(data.data.post.votes.includes(user?._id));
+            setTurnBlack(data.data.post.votes.includes(user?.id));
         },
     });
 
@@ -43,7 +43,7 @@ export default function Post() {
         enabled: false,
         onSuccess: (res) => {
             if (res.data.success) {
-                socket.emit("notify", {userId: data?.data.user._id});
+                socket.emit("notify", {userId: data?.data.user.id});
                 setVotes((prev) => prev + 1);
             }
         },
@@ -116,10 +116,10 @@ export default function Post() {
                         <PostAuthor
                             title={data.data.post.title}
                             avatar={data.data.user.avatar}
-                            postId={data.data.post._id}
+                            postId={data.data.post.id}
                             timestamp={data.data.post.createdAt}
                             username={data.data.user.name}
-                            userId={data.data.user._id}
+                            userId={data.data.user.id}
                             postUrl={postUrl}
                             anchorEl={anchorEl}
                             deletePost={deletePost}
@@ -194,13 +194,13 @@ export default function Post() {
                                 >
                   <span
                       onClick={() =>
-                          data?.data.post.userId !== user?._id && votePost()
+                          data?.data.post.userId !== user?.id && votePost()
                       }
                       style={{
                           ...iconColor,
                           color: turnBlack ? "black" : "rgb(171 169 169)",
                           cursor:
-                              data?.data.post.userId == user?._id
+                              data?.data.post.userId == user?.id
                                   ? "not-allowed"
                                   : "pointer",
                       }}
@@ -250,14 +250,14 @@ export default function Post() {
                                     open={open}
                                     handleClose={handleClose}
                                     editPost={editPost}
-                                    userId={data?.data.user._id}
+                                    userId={data?.data.user.id}
                                 />
                             </div>
                         </div>
                     </div>
-                    {id && data?.data?.user._id && (
+                    {id && data?.data?.user.id && (
                         <MoreFrom
-                            userId={data?.data?.user._id}
+                            userId={data?.data?.user.id}
                             postId={id}
                             avatar={data?.data?.user.avatar}
                             username={data?.data?.user.name}
@@ -280,7 +280,7 @@ export default function Post() {
                 {data?.data.user && (
                     <UserPostCard
                         followers={data.data.user.followers}
-                        userId={data.data.user._id}
+                        userId={data.data.user.id}
                         username={data.data.user.name}
                         bio={data.data.user.bio}
                         image={data.data.user.avatar}

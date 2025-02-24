@@ -7,7 +7,7 @@
     "build": "npx tsc",
     "test": "jest",
     "dev:api-example": "nodemon samples/main.ts",
-    "dev:command-ingress": "nodemon command-ingress/main.ts",
+    "dev:command-ingress": "nodemon executable/command-ingress/main.ts",
     "lint": "npx eslint .",
     "lint:fix": "npx eslint --fix ."
   },
@@ -18,6 +18,7 @@
     "@faker-js/faker": "^9.5.0",
     "@jest/globals": "^29.7.0",
     "axios": "^1.3.4",
+    "class-validator": "^0.14.1",
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "envalid": "^7.3.1",
@@ -27,10 +28,12 @@
     "lodash": "^4.17.21",
     "mongodb": "^6.13.0",
     "mongoose": "^7.0.1",
+    "morgan": "^1.10.0",
     "qs": "^6.11.1",
     "redis": "^4.7.0",
     "short-uuid": "^5.2.0",
-    "socket.io": "^4.6.1"
+    "socket.io": "^4.6.1",
+    "uuid": "^11.1.0"
   },
   "devDependencies": {
     "@testcontainers/mongodb": "^10.18.0",
