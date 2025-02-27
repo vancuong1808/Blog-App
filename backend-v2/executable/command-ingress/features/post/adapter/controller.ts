@@ -1,7 +1,7 @@
 import { NextFunction, Response } from 'express';
 import { BaseController } from '../../../shared/base-controller';
 import { PostService } from '../types';
-import { CreatePostBody, GetPostDto } from './dto';
+import { CreatePostBody, GetPostDto, EditPostDto, DelPostDto } from './dto';
 import responseValidationError from '../../../shared/response';
 import { HttpRequest } from '../../../types';
 
@@ -26,6 +26,33 @@ export class PostController extends BaseController {
       res.status(200).json({ post });
       return;
     });
+  }
+
+  async editPost(req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
+    await this.execWithTryCatchBlock(req, res, next, async(req, res, _next) => {
+      const editPostDto = new EditPostDto(req.params, req.body);
+      const validateResult = await editPostDto.validate();
+      if (!validateResult.ok) {
+        responseValidationError(res, validateResult.errors[0]);
+        return;
+      }
+      const editPost = await this.service.editPost(editPostDto.id, editPostDto.postEntityDto);
+      res.status(200).json({ editPost });
+      return;
+    });
+  }
+
+  async delPost(req: HttpRequest, res: Response, next: NextFunction): Promise<void> {
+    await this.execWithTryCatchBlock(req, res, next, async(req, res, _next) => {
+      const delPostDto = new DelPostDto(req.params);
+      const validateResult = await delPostDto.validate();
+      if (!validateResult.ok) {
+        responseValidationError(res, validateResult.errors[0]);
+        return;
+      }
+      const delPost = await this.service.delPost(delPostDto.id);
+      res.status(200).json({ delPost });
+    })
   }
 
   async createPost(req: HttpRequest, res: Response, next: NextFunction): Promise<void> {

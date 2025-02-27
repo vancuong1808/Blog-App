@@ -23,7 +23,9 @@ type PostEntity = {
 interface PostService {
   createPost(postCreationDto: PostCreationDto): Promise<PostEntity>;
   fetchPostsByUser(id: string): Promise<PostEntity[]>;
-  getPost(id: string): Promise<PostEntity>
+  getPost(id: string): Promise<PostEntity>;
+  editPost(id: string, postEntityDto : Partial<PostEntity>): Promise<PostEntity>;
+  delPost(id: string) : Promise<PostEntity>;
 }
 
 export {

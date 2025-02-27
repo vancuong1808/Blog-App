@@ -17,6 +17,14 @@ export const unfollowUser = asyncHandler(async (req, res, next) => {
 
 });
 
+export const getAllFollowers = asyncHandler(async (req, res, next) => {
+
+});
+
+export const getAllFollowings = asyncHandler(async (req, res, next) => {
+
+});
+
 export const suggestUsers = asyncHandler(async (req, res, next) => {
 
 });
@@ -48,14 +56,6 @@ export const removeUserIntrests = asyncHandler(async (req, res, next) => {
 
 // totdo pagination
 export const getNotifications = asyncHandler(async (req, res, next) => {
-
-});
-
-export const getAllFollowers = asyncHandler(async (req, res, next) => {
-
-});
-
-export const getAllFollowings = asyncHandler(async (req, res, next) => {
 
 });
 

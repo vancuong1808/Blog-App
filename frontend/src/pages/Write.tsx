@@ -77,7 +77,7 @@ export default function Write() {
             params.append("title", post.title);
             params.append("tags", post.tags);
             params.append("markdown", post.markdown);
-            return httpRequest.put(`${url}/post/${postId}`, params);
+            return httpRequest.patch(`${url}/post/${postId}`, params);
         },
         queryKey: ["blog", "post", "update", postId],
         enabled: false,
