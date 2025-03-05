@@ -1,8 +1,14 @@
 import { UserEntity, UserService } from '../types';
+import mongoose from 'mongoose';
 import UserModel from '../../../../../internal/model/user';
 
 export class UserServiceImpl implements UserService {
   async followUser(id: string, userId: string): Promise<UserEntity> {
+    if (!mongoose.Types.ObjectId.isValid(id) || !mongoose.Types.ObjectId.isValid(userId)) {
+      console.log( id, userId );
+      throw new Error('Invalid ID format');
+    }
+  
     const follower = await UserModel
                             .findOne({ _id : id })
                             .populate('followers');
@@ -15,16 +21,24 @@ export class UserServiceImpl implements UserService {
     if (!user) {
       throw new Error('User not found');
     }
-    await UserModel
-          .findByIdAndUpdate(
-            follower._id,
-            { $addToSet: { followers: user._id } },
-            { new: true });
-    await UserModel
-          .findByIdAndUpdate(
-            user._id,
-            { $addToSet: { followings: follower._id } },
-            { new: true });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    const updatedFollower = await UserModel
+                  .updateOne(
+                    { _id : follower._id },
+                    { $addToSet: { followers: user._id } },
+                    { session : session });
+    const updatedUser = await UserModel
+                  .updateOne(
+                    { _id : user._id },
+                    { $addToSet: { followings: follower._id } },
+                    { session : session });
+    if (updatedUser.modifiedCount != 1 || updatedFollower.modifiedCount != 1 ) {
+      await session.abortTransaction();
+    } else {
+      await session.commitTransaction();
+    }
+    session.endSession();
     return {
       id : String(follower._id),
       email : follower.email,
@@ -45,16 +59,24 @@ export class UserServiceImpl implements UserService {
     if (!user) {
       throw new Error('User not found');
     }
-    await UserModel
-          .findByIdAndUpdate(
-            unfollower._id,
-            { $pull: { followers: user._id } },
-            { new: true });
-    await UserModel
-          .findByIdAndUpdate(
-            user._id,
-            { $pull: { followings: unfollower._id } },
-            { new: true });
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    const updatedUnfollower = await UserModel
+                  .updateOne(
+                    { _id : unfollower._id },
+                    { $pull: { followers: user._id } },
+                    { session : session });
+    const updatedUser = await UserModel
+                  .updateOne(
+                    { _id : user._id },
+                    { $pull: { followings: unfollower._id } },
+                    { session : session });
+    if (updatedUser.modifiedCount != 1 || updatedUnfollower.modifiedCount != 1 ) {
+      await session.abortTransaction();
+    } else {
+      await session.commitTransaction();
+    }
+    session.endSession();
     return {
       id : String(unfollower._id),
       email : unfollower.email,
@@ -62,6 +84,7 @@ export class UserServiceImpl implements UserService {
       avatar : unfollower.avatar
     }
   }
+  
   async getFollower(id: string): Promise<UserEntity[]> {
     const follower = await UserModel
                             .findOne({_id : id})

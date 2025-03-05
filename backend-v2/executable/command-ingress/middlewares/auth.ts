@@ -23,6 +23,7 @@ const requireAuthorizedUser = (req: HttpRequest, res: Response, next: NextFuncti
     req.getSubject = () => String(payload.sub);
     next();
   } catch (error) {
+    console.log(error);
     next(error);
   }
 };

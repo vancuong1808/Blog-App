@@ -17,8 +17,10 @@ import { PostController } from './features/post/adapter/controller';
 import initAuthRoute from './features/auth/adapter/route';
 import initPostRoute from './features/post/adapter/route';
 import initUserRoute from './features/user/adapter/route';
+import searchRouter from './features/search/route';
 import { UserController } from './features/user/adapter/controller';
 import { UserServiceImpl } from './features/user/domain/service';
+
 
 const app = express();
 
