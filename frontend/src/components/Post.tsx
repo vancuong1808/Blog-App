@@ -83,8 +83,6 @@ export default function Post({
     setAnchorEl(null);
   };
 
-  console.log('Timestamp: ', timestamp);
-
   return (
     <div
       style={{

@@ -8,11 +8,11 @@ const setupUserRoute = (controller: UserController) => {
     router.route('/:id')
         .get(controller.getOne.bind(controller));
 
-    router.route('/:id/follow')
-        .post(requireAuthorizedUser ,controller.followUser.bind(controller));
+    router.route('/follow/:id')
+        .put(requireAuthorizedUser ,controller.followUser.bind(controller));
 
-    router.route('/:id/unfollow')
-        .delete(requireAuthorizedUser ,controller.unfollowUser.bind(controller));
+    router.route('/unfollow/:id')
+        .put(requireAuthorizedUser ,controller.unfollowUser.bind(controller));
 
     router.route('/:id/followers')
         .get(controller.getFollowers.bind(controller));

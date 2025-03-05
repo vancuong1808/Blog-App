@@ -59,7 +59,7 @@ const createHttpServer = (redisClient: any) => {
 
   app.use(recoverMiddleware);
 
-  // app.use('/search', searchRouter);
+  app.use('/search', searchRouter);
   // app.use('/suggestions', setupSuggestionRoute());
 
 

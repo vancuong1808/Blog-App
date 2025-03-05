@@ -24,16 +24,16 @@ export class UserServiceImpl implements UserService {
     const session = await mongoose.startSession();
     session.startTransaction();
     const updatedFollower = await UserModel
-                  .updateOne(
-                    { _id : follower._id },
-                    { $addToSet: { followers: user._id } },
-                    { session : session });
+                                    .updateOne(
+                                      { _id : follower._id },
+                                      { $addToSet: { followers: user._id } },
+                                      { session : session });
     const updatedUser = await UserModel
-                  .updateOne(
-                    { _id : user._id },
-                    { $addToSet: { followings: follower._id } },
-                    { session : session });
-    if (updatedUser.modifiedCount != 1 || updatedFollower.modifiedCount != 1 ) {
+                                .updateOne(
+                                  { _id : user._id },
+                                  { $addToSet: { followings: follower._id } },
+                                  { session : session });
+          if (updatedUser.modifiedCount != 1 || updatedFollower.modifiedCount != 1 ) {
       await session.abortTransaction();
     } else {
       await session.commitTransaction();
@@ -62,15 +62,15 @@ export class UserServiceImpl implements UserService {
     const session = await mongoose.startSession();
     session.startTransaction();
     const updatedUnfollower = await UserModel
-                  .updateOne(
-                    { _id : unfollower._id },
-                    { $pull: { followers: user._id } },
-                    { session : session });
+                                      .updateOne(
+                                        { _id : unfollower._id },
+                                        { $pull: { followers: user._id } },
+                                        { session : session });
     const updatedUser = await UserModel
-                  .updateOne(
-                    { _id : user._id },
-                    { $pull: { followings: unfollower._id } },
-                    { session : session });
+                                .updateOne(
+                                  { _id : user._id },
+                                  { $pull: { followings: unfollower._id } },
+                                  { session : session });
     if (updatedUser.modifiedCount != 1 || updatedUnfollower.modifiedCount != 1 ) {
       await session.abortTransaction();
     } else {
