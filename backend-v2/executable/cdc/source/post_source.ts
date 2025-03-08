@@ -5,7 +5,7 @@ import Post from '../../../internal/model/post';
 class PostSource implements ISource {
     async get(): Promise<EventEmitter> {
         const eventEmitter = new EventEmitter();
-        
+
         Post.watch()
             .on('change', (stream : any) => {
                 eventEmitter.emit('change', stream);

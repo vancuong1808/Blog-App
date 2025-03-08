@@ -1,4 +1,4 @@
-import { createClient } from "redis";
+import { createClient } from 'redis';
 import { ISink } from '../sink';
 
 class RedisSink implements ISink {

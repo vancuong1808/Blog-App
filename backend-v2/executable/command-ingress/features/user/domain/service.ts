@@ -8,12 +8,12 @@ export class UserServiceImpl implements UserService {
       console.log( id, userId );
       throw new Error('Invalid ID format');
     }
-  
+
     const follower = await UserModel
                             .findOne({ _id : id })
                             .populate('followers');
     if (!follower) {
-      throw new Error(`follower not found`);
+      throw new Error('follower not found');
     }
     const user = await UserModel
                         .findOne({ _id : userId })
@@ -51,7 +51,7 @@ export class UserServiceImpl implements UserService {
                             .findOne({ _id : id })
                             .populate('followers');
     if (!unfollower) {
-      throw new Error(`follower not found`);
+      throw new Error('follower not found');
     }
     const user = await UserModel
                         .findOne({ _id : userId })
@@ -84,7 +84,7 @@ export class UserServiceImpl implements UserService {
       avatar : unfollower.avatar
     }
   }
-  
+
   async getFollower(id: string): Promise<UserEntity[]> {
     const follower = await UserModel
                             .findOne({_id : id})
@@ -115,7 +115,7 @@ export class UserServiceImpl implements UserService {
     if (!following) {
       throw new Error('following not found');
     }
-    const followingList = await Promise.all( 
+    const followingList = await Promise.all(
         following.followings.map( async(_following) => {
           const user = await UserModel.findOne({ _id : _following._id });
           if (!user) {

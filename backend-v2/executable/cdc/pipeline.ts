@@ -1,7 +1,7 @@
 import { ISink } from './sink';
 import { ISource } from './source';
 
-type Transformer = (data :any) => Promise<any>; 
+type Transformer = (data :any) => Promise<any>;
 
 interface IOperator {
     run : (data : any) => Promise<any>;

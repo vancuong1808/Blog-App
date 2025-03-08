@@ -6,18 +6,18 @@ import PostModel from '../../../../internal/model/post'
 export const postSearch = asyncHandler(async (req, res, next) => {
     const { query } = req.params;
     if (!query) {
-        next("Query not found");
+        next('Query not found');
         return;
     }
     try {
         const PostSearch = await PostModel
                                     .find({ $or : [
-                                            { title : { $regex : query, 
-                                                        $options : "isx" } },
+                                            { title : { $regex : query,
+                                                        $options : 'isx' } },
                                             { tags : { $in : [query] } }
                                         ]});
         if (!PostSearch) {
-            next("PostSearch not found");
+            next('PostSearch not found');
             return;
         }
         const PostSearchResult = await Promise.all(
@@ -25,7 +25,7 @@ export const postSearch = asyncHandler(async (req, res, next) => {
                 const user = await UserModel
                                     .findOne({ _id : post.author });
                 if (!user) {
-                    next("User not found");
+                    next('User not found');
                     return null;
                 }
                 return {
@@ -56,14 +56,14 @@ export const postSearch = asyncHandler(async (req, res, next) => {
 export const topicSearch = asyncHandler(async (req, res, next) => {
     const { query } = req.params;
     if (!query) {
-        next("Query not found");
+        next('Query not found');
         return;
     }
     try {
         const TopicSearch = await PostModel
                                     .find({ tags : { $in : [query] } });
         if (!TopicSearch) {
-            next("Topic not found");
+            next('Topic not found');
             return;
         }
         const TopicSearchResult = TopicSearch.map((topic : any) => {
@@ -82,15 +82,15 @@ export const topicSearch = asyncHandler(async (req, res, next) => {
 export const peopleSearch = asyncHandler(async (req, res, next) => {
     const { query } = req.params;
     if (!query) {
-        next("Query not found");
+        next('Query not found');
         return;
     }
     try {
         const UserSearch = await UserModel
-                                    .find({ name : { $regex : query, $options : "isx" }})
-                                    .populate("followers");
+                                    .find({ name : { $regex : query, $options : 'isx' }})
+                                    .populate('followers');
         if (!UserSearch) {
-            next("UserSearch not found");
+            next('UserSearch not found');
             return;
         }
         const UserSearchResult = UserSearch.map( (user : any) => {

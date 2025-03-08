@@ -1,4 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
+
 export default class ServerError extends Error {
   statusCode: number;
   options: any;

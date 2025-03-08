@@ -19,7 +19,7 @@ const setupUserRoute = (controller: UserController) => {
 
     router.route('/:id/followings')
         .get(controller.getFollowings.bind(controller));
-        
+
     return router;
 }
 
