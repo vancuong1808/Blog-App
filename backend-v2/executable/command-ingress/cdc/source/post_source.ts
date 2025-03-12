@@ -1,6 +1,6 @@
-import { ISource } from '../source';
 import EventEmitter from 'events';
-import Post from '../../../internal/model/post';
+import Post from '../../../../internal/model/post';
+import { ISource } from '../source';
 
 class PostSource implements ISource {
     async get(): Promise<EventEmitter> {
@@ -16,5 +16,5 @@ class PostSource implements ISource {
 }
 
 export {
-    PostSource,
-}
+    PostSource
+};

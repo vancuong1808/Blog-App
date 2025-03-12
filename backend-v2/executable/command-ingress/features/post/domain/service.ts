@@ -55,35 +55,19 @@ export class PostServiceImpl implements PostService {
     }
   }
 
-  async delPost(id: string) : Promise<PostEntity> {
+  async delPost(id: string) : Promise<boolean> {
     const post = await Post.findOne({ _id: id});
     if (!post) {
       throw new Error('Post not found');
     }
     const user = await User.findOne({ _id : post.author });
     const delPost = await Post.findByIdAndDelete({ _id : id});
-    return {
-      id: String(delPost._id),
-      image: String(delPost.image),
-      authorID: String(delPost.author),
-      markdown: delPost.markdown,
-      title: delPost.title,
-      tags: delPost.tags,
-      summary: delPost.summary,
-      createdAt: Number(delPost.createdAt),
-      author: {
-        id: user.id,
-        email: user.email,
-        name: user.name,
-        avatar: user.avatar,
-      },
-    }
+    return true;
   }
 
   async fetchPostsByUser(id: string): Promise<PostEntity[]> {
     const results = await Post.find({ author: id })
-      .lean(true);
-
+                              .lean(true);
     return results.map(r => ({
       id: String(r._id),
       title: String(r.title || ''),
@@ -123,5 +107,8 @@ export class PostServiceImpl implements PostService {
     }
   }
 
+  async getFollowerFeed(id : string): Promise<PostEntity> {
+    return;
+  }
 
 }

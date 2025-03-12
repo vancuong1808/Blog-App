@@ -1,5 +1,5 @@
+import UserModel from '../../../../internal/model/user';
 import { IOperator } from '../pipeline';
-import UserModel from '../../../internal/model/user'
 
 class GetFollower implements IOperator {
 
@@ -16,5 +16,5 @@ class GetFollower implements IOperator {
 }
 
 export {
-    GetFollower,
-}
+    GetFollower
+};

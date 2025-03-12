@@ -1,11 +1,11 @@
-import {config} from 'dotenv';
-import path from 'path';
-config({ path: path.join(process.cwd(), '.env') });
-import {createHttpServer} from './app';
-import { ChangeStreamClientCode } from '../cdc/client_code';
+import { config } from 'dotenv';
 import mongoose from 'mongoose';
-import env from './utils/env';
+import path from 'path';
 import { connectRedis } from '../../lib/redis';
+import { createHttpServer } from './app';
+import { ChangeStreamClientCode } from './cdc/client_code';
+import env from './utils/env';
+config({ path: path.join(process.cwd(), '.env') });
 
 async function start() {
     await mongoose.connect(env.MONGO_URI);

@@ -1,24 +1,24 @@
 
 import express from 'express';
-import env from './utils/env';
-import logger from './middlewares/logger';
 import morgan from 'morgan';
+import logger from './middlewares/logger';
+import env from './utils/env';
 
 import cors from 'cors';
-import { recoverMiddleware } from './middlewares/recover';
 import { createServer } from 'http';
+import { recoverMiddleware } from './middlewares/recover';
 
 import { AuthController } from './features/auth/adapter/controller';
 import { AuthServiceImpl } from './features/auth/domain/service';
 import { GoogleIdentityBroker } from './features/auth/identity-broker/google-idp.broker';
-import { PostServiceImpl } from './features/post/domain/service';
 import { PostController } from './features/post/adapter/controller';
+import { PostServiceImpl } from './features/post/domain/service';
 
 import initAuthRoute from './features/auth/adapter/route';
 import initPostRoute from './features/post/adapter/route';
-import initUserRoute from './features/user/adapter/route';
-import searchRouter from './features/search/route';
+import searchRouter from './features/search/adapter/route';
 import { UserController } from './features/user/adapter/controller';
+import initUserRoute from './features/user/adapter/route';
 import { UserServiceImpl } from './features/user/domain/service';
 
 
@@ -67,5 +67,6 @@ const createHttpServer = (redisClient: any) => {
 };
 
 export {
-  createHttpServer,
+    createHttpServer
 };
+

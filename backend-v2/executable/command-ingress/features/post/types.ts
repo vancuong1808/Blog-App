@@ -25,7 +25,8 @@ interface PostService {
   fetchPostsByUser(id: string): Promise<PostEntity[]>;
   getPost(id: string): Promise<PostEntity>;
   editPost(id: string, postEntityDto : Partial<PostEntity>): Promise<PostEntity>;
-  delPost(id: string) : Promise<PostEntity>;
+  delPost(id: string) : Promise<boolean>;
+  getFollowerFeed(id : string) : Promise<PostEntity>;
 }
 
 export {

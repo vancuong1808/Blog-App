@@ -1,15 +1,12 @@
-import asyncHandler from 'express-async-handler';
-import UserModel from '../../../../internal/model/user'
-import PostModel from '../../../../internal/model/post'
+import UserModel from '../../../../../internal/model/user'
+import PostModel from '../../../../../internal/model/post'
+import { PostSearch, PeopleSearch, TopicSearch, SearchService } from '../types';
 
-
-export const postSearch = asyncHandler(async (req, res, next) => {
-    const { query } = req.params;
-    if (!query) {
-        next('Query not found');
-        return;
-    }
-    try {
+export class SearchServiceImpl implements SearchService {
+    async postSearch(query : string) : Promise<PostSearch[]> {
+        if (!query) {
+            throw new Error('Query not found');
+        }
         const PostSearch = await PostModel
                                     .find({ $or : [
                                             { title : { $regex : query,
@@ -17,16 +14,14 @@ export const postSearch = asyncHandler(async (req, res, next) => {
                                             { tags : { $in : [query] } }
                                         ]});
         if (!PostSearch) {
-            next('PostSearch not found');
-            return;
+            throw new Error('PostSearch not found');
         }
         const PostSearchResult = await Promise.all(
             PostSearch.map ( async(post : any) => {
                 const user = await UserModel
                                     .findOne({ _id : post.author });
                 if (!user) {
-                    next('User not found');
-                    return null;
+                    throw new Error('User not found');
                 }
                 return {
                     id: String(post._id),
@@ -46,25 +41,39 @@ export const postSearch = asyncHandler(async (req, res, next) => {
                 }
             }
         ))
-        res.status(200).json( PostSearchResult );
-        return;
-    } catch (_error) {
-        next(_error);
+        return PostSearchResult;
     }
-});
 
-export const topicSearch = asyncHandler(async (req, res, next) => {
-    const { query } = req.params;
-    if (!query) {
-        next('Query not found');
-        return;
+    async peopleSearch(query : string) : Promise<PeopleSearch[]> {
+        if (!query) {
+            throw new Error('Query not found');
+        }
+        const UserSearch = await UserModel
+                                    .find({ name : { $regex : query, $options : 'isx' }})
+                                    .populate('followers');
+        if (!UserSearch) {
+            throw new Error('UserSearch not found');
+        }
+        const UserSearchResult = UserSearch.map( (user : any) => {
+            return {
+                id : String(user._id),
+                name :  user.name,
+                avatar : user.avatar,
+                followers : user.followers,
+                bio : user.bio,
+            }
+        })
+        return UserSearchResult;
     }
-    try {
+
+    async topicSearch(query : string) : Promise<TopicSearch[]> {
+        if (!query) {
+            throw new Error('Query not found');
+        }
         const TopicSearch = await PostModel
                                     .find({ tags : { $in : [query] } });
         if (!TopicSearch) {
-            next('Topic not found');
-            return;
+            throw new Error('Topic not found');
         }
         const TopicSearchResult = TopicSearch.map((topic : any) => {
             return {
@@ -72,39 +81,6 @@ export const topicSearch = asyncHandler(async (req, res, next) => {
                 name : topic.tags.at(0)
             }
         });
-        console.log(TopicSearchResult);
-        res.status(200).json(TopicSearchResult);
-    } catch (_error) {
-        next(_error);
+        return TopicSearchResult;
     }
-});
-
-export const peopleSearch = asyncHandler(async (req, res, next) => {
-    const { query } = req.params;
-    if (!query) {
-        next('Query not found');
-        return;
-    }
-    try {
-        const UserSearch = await UserModel
-                                    .find({ name : { $regex : query, $options : 'isx' }})
-                                    .populate('followers');
-        if (!UserSearch) {
-            next('UserSearch not found');
-            return;
-        }
-        const UserSearchResult = UserSearch.map( (user : any) => {
-            return {
-                id : String(user._id),
-                name :  user.name,
-                avatar : user.avatar,
-                followers : user.followers
-            }
-        })
-        console.log(UserSearchResult)
-        res.status(200).json(UserSearchResult);
-        return;
-    } catch (_error) {
-        next(_error);
-    }
-});
+}
